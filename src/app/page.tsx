@@ -15,7 +15,7 @@ import {
   createTheme,
 } from "@mui/material";
 
-// MUI v5 / v6 / v7 全部で安定動作する Grid
+// ★ MUI Grid の正しい import（Vercel / Next.js / MUI 全環境で動く）
 import Grid from "@mui/material/Grid";
 
 const theme = createTheme({
@@ -29,6 +29,7 @@ export default function LandingPage() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
+      {/* Header */}
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
@@ -40,13 +41,15 @@ export default function LandingPage() {
         </Toolbar>
       </AppBar>
 
+      {/* Hero Section */}
       <Container maxWidth="md" sx={{ textAlign: "center", py: 10 }}>
         <Typography variant="h3" fontWeight={700} gutterBottom>
           AIがあなたのコードを<br />24時間レビュー
         </Typography>
 
         <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-          プロのようなコードを書けるようになる。AI搭載のプログラミング学習サービス
+          プロのようなコードを書けるようになる。
+          AI搭載のプログラミング学習サービス
         </Typography>
 
         <Button variant="contained" size="large" sx={{ px: 5, py: 1.5 }}>
@@ -57,6 +60,7 @@ export default function LandingPage() {
       {/* Features */}
       <Container sx={{ py: 10 }}>
         <Grid container spacing={4}>
+          {/* Feature 1 */}
           <Grid item xs={12} md={4}>
             <Card elevation={3}>
               <CardContent>
@@ -70,6 +74,7 @@ export default function LandingPage() {
             </Card>
           </Grid>
 
+          {/* Feature 2 */}
           <Grid item xs={12} md={4}>
             <Card elevation={3}>
               <CardContent>
@@ -83,6 +88,7 @@ export default function LandingPage() {
             </Card>
           </Grid>
 
+          {/* Feature 3 */}
           <Grid item xs={12} md={4}>
             <Card elevation={3}>
               <CardContent>
@@ -98,6 +104,7 @@ export default function LandingPage() {
         </Grid>
       </Container>
 
+      {/* Footer */}
       <Box sx={{ py: 5, textAlign: "center", bgcolor: "#f5f5f5" }}>
         <Typography variant="body2" color="text.secondary">
           © 2025 SurviveAI All Rights Reserved.
