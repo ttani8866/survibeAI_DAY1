@@ -11,12 +11,10 @@ import {
   Card,
   CardContent,
   Grid,
-  Avatar,
   CssBaseline,
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 
 const theme = createTheme({
   typography: {
@@ -46,9 +44,9 @@ export default function LandingPage() {
         <Typography variant="h3" fontWeight={700} gutterBottom>
           AIがあなたのコードを<br />24時間レビュー
         </Typography>
+
         <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-          プロのようなコードを書けるようになる。  
-          AI搭載のプログラミング学習サービス
+          プロのようなコードを書けるようになる。AI搭載のプログラミング学習サービス
         </Typography>
 
         <Button variant="contained" size="large" sx={{ px: 5, py: 1.5 }}>
@@ -58,8 +56,10 @@ export default function LandingPage() {
 
       {/* Features */}
       <Container sx={{ py: 10 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+        <Grid container spacing={4} component="div">
+          
+          {/* Feature 1 */}
+          <Grid item xs={12} md={4} component="div">
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
@@ -72,7 +72,8 @@ export default function LandingPage() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          {/* Feature 2 */}
+          <Grid item xs={12} md={4} component="div">
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
@@ -85,7 +86,8 @@ export default function LandingPage() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          {/* Feature 3 */}
+          <Grid item xs={12} md={4} component="div">
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
@@ -97,6 +99,7 @@ export default function LandingPage() {
               </CardContent>
             </Card>
           </Grid>
+
         </Grid>
       </Container>
 
