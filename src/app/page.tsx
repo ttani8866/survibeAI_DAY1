@@ -16,7 +16,8 @@ import {
 } from "@mui/material";
 
 // ★ MUI Grid の正しい import（Vercel / Next.js / MUI 全環境で動く）
-import Grid from "@mui/material/Grid";
+// Grid2 を Grid という名前で読み込む（エイリアス）
+import Grid from "@mui/material/Grid2";
 
 const theme = createTheme({
   typography: {
