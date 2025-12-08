@@ -61,7 +61,7 @@ export default function LandingPage() {
       <Container sx={{ py: 10 }}>
         <Grid container spacing={4}>
           {/* Feature 1 */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
@@ -75,7 +75,7 @@ export default function LandingPage() {
           </Grid>
 
           {/* Feature 2 */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
@@ -89,7 +89,7 @@ export default function LandingPage() {
           </Grid>
 
           {/* Feature 3 */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>
