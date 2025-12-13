@@ -156,6 +156,8 @@ export default function HomePage() {
 
             <Box sx={{ display: "flex", gap: 2 }}>
               <Button
+                component={Link}
+                href="/onboarding/signup"
                 variant="contained"
                 size="large"
                 endIcon={<ArrowForwardIcon />}
@@ -372,6 +374,8 @@ export default function HomePage() {
             今すぐ無料で始めて、コーディングスキルを次のレベルへ。
           </Typography>
           <Button
+            component={Link}
+            href="/onboarding/signup"
             variant="contained"
             size="large"
             endIcon={<ArrowForwardIcon />}
