@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "SurviveAI",
   description: "AI Programming Learning Service",
 };
-
+　　
 export default function RootLayout({
   children,
 }: {
