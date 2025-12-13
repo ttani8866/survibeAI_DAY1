@@ -1,13 +1,10 @@
-"use client";
-
 import * as React from "react";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Providers } from "./providers";
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "Roboto, sans-serif",
-  },
-});
+export const metadata = {
+  title: "SurviveAI - AIコードレビュー学習サービス",
+  description: "AIがあなたのコードを24時間レビュー。プロのようなコードを書けるようになる。",
+};
 
 export default function RootLayout({
   children,
@@ -17,10 +14,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
