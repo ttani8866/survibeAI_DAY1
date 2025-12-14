@@ -1,21 +1,9 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 
+// Google認証は一時的に無効化
+// Google Cloud Consoleの設定反映後に再度有効化してください
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  debug: true,
-  providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-    }),
-  ],
+  providers: [],
   pages: {
     signIn: "/auth/signin",
   },
