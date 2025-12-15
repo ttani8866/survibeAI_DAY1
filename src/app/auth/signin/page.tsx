@@ -9,7 +9,9 @@ import Link from "next/link";
 
 export default function SignInPage() {
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/dashboard" });
+    console.log("Googleログインボタンがクリックされました");
+    // 直接APIエンドポイントにリダイレクト
+    window.location.href = "/api/auth/signin/google?callbackUrl=/dashboard";
   };
 
   return (

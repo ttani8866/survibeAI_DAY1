@@ -11,9 +11,10 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  pages: {
-    signIn: "/auth/signin",
-  },
+  // pages設定を一時的に無効化してテスト
+  // pages: {
+  //   signIn: "/auth/signin",
+  // },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }) {
