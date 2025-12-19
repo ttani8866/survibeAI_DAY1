@@ -1,71 +1,18 @@
 "use client";
 
 import React from "react";
-import { Box, Container, Typography, Button, AppBar, Toolbar } from "@mui/material";
+import { Box, Container, Typography, Button } from "@mui/material";
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
 import FeatureCards from "@/components/FeatureCards";
 import CTASection from "@/components/CTASection";
+import AuthHeader from "@/components/AuthHeader";
 
 export default function HomePage() {
   return (
     <Box sx={{ bgcolor: "#0a0a0a", color: "#fff" }}>
       {/* Header */}
-      <AppBar
-        position="fixed"
-        sx={{
-          bgcolor: "rgba(10, 10, 10, 0.8)",
-          backdropFilter: "blur(10px)",
-          boxShadow: "none",
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-        }}
-      >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            component={Link}
-            href="/"
-            sx={{
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              fontSize: "1rem",
-              textDecoration: "none",
-              color: "inherit",
-            }}
-          >
-            SURVIVE<span style={{ fontWeight: 300 }}>AI</span>
-          </Typography>
-          <Box sx={{ display: "flex", gap: 3 }}>
-            <Button
-              component={Link}
-              href="/contact"
-              sx={{
-                color: "rgba(255,255,255,0.7)",
-                textTransform: "none",
-                fontSize: "0.875rem",
-                "&:hover": { color: "#fff" },
-              }}
-            >
-              Contact
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.3)",
-                textTransform: "none",
-                px: 3,
-                "&:hover": {
-                  borderColor: "#fff",
-                  bgcolor: "rgba(255,255,255,0.05)",
-                },
-              }}
-            >
-              ログイン
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <AuthHeader />
 
       {/* Hero Section with Animations */}
       <HeroSection />

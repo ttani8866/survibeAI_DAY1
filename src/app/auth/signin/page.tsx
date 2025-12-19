@@ -8,10 +8,17 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
 
 export default function SignInPage() {
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     console.log("Googleログインボタンがクリックされました");
-    // 直接APIエンドポイントにリダイレクト
-    window.location.href = "/api/auth/signin/google?callbackUrl=/dashboard";
+    try {
+      const result = await signIn("google", { 
+        callbackUrl: "/dashboard",
+        redirect: true 
+      });
+      console.log("signIn result:", result);
+    } catch (error) {
+      console.error("signIn error:", error);
+    }
   };
 
   return (
@@ -79,13 +86,14 @@ export default function SignInPage() {
           アカウントにログインして、AIコードレビューを始めましょう
         </Typography>
 
-        {/* Google Login Button */}
+        {/* Google Login Button - リンクとして実装 */}
         <Button
+          component="a"
+          href="/api/auth/signin/google?callbackUrl=/dashboard"
           fullWidth
           variant="outlined"
           size="large"
           startIcon={<GoogleIcon />}
-          onClick={handleGoogleSignIn}
           sx={{
             py: 2,
             color: "#fff",
@@ -93,6 +101,7 @@ export default function SignInPage() {
             textTransform: "none",
             fontSize: "1rem",
             borderRadius: 1,
+            textDecoration: "none",
             "&:hover": {
               borderColor: "#fff",
               bgcolor: "rgba(255,255,255,0.05)",
