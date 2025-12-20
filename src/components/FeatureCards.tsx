@@ -31,14 +31,7 @@ const features = [
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
+  visible: { opacity: 1, y: 0 },
 };
 
 interface FeatureCardProps {
@@ -51,7 +44,7 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
   return (
-    <Grid item xs={12} md={4}>
+    <Grid size={{ xs: 12, md: 4 }}>
       {/* HTML標準のaタグを使用して、ブラウザの基本機能で遷移させる */}
       <a href={link} style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
         <motion.div
@@ -59,7 +52,7 @@ const FeatureCard = ({ number, title, description, link, index }: FeatureCardPro
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={cardVariants}
-          transition={{ delay: index * 0.2 }}
+          transition={{ delay: index * 0.2, duration: 0.8 }}
           whileHover={{
             boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
             borderColor: "#6366f1",

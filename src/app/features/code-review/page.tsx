@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Box, Container, Typography, Grid, Paper, Button } from "@mui/material";
+import { Box, Container, Typography, Paper, Button } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { motion } from "framer-motion";
 import AuthHeader from "@/components/AuthHeader";
 import CodeIcon from "@mui/icons-material/Code";
@@ -49,7 +50,7 @@ export default function CodeReviewPage() {
 
         <Grid container spacing={4}>
           {features.map((item, index) => (
-            <Grid item xs={12} md={4} key={index}>
+            <Grid size={{ xs: 12, md: 4 }} key={index}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

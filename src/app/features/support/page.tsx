@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Box, Container, Typography, Grid, Card, CardContent, Button, Divider } from "@mui/material";
+import { Box, Container, Typography, Card, CardContent, Button, Divider } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { motion } from "framer-motion";
 import AuthHeader from "@/components/AuthHeader";
 import ForumIcon from "@mui/icons-material/Forum";
@@ -30,7 +31,7 @@ export default function SupportCommunityPage() {
         </motion.div>
 
         <Grid container spacing={4} sx={{ mb: 12 }}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card sx={{ bgcolor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", height: "100%" }}>
               <CardContent sx={{ p: 4 }}>
                 <ForumIcon sx={{ fontSize: 40, color: "#fbbf24", mb: 2 }} />
@@ -41,7 +42,7 @@ export default function SupportCommunityPage() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card sx={{ bgcolor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", height: "100%" }}>
               <CardContent sx={{ p: 4 }}>
                 <GroupsIcon sx={{ fontSize: 40, color: "#5865F2", mb: 2 }} />
@@ -59,7 +60,7 @@ export default function SupportCommunityPage() {
         {/* AI Contest Section */}
         <Box sx={{ p: 6, bgcolor: "rgba(251, 191, 36, 0.05)", borderRadius: 8, border: "1px solid rgba(251, 191, 36, 0.2)" }}>
           <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={7}>
+            <Grid size={{ xs: 12, md: 7 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                 <EmojiEventsIcon sx={{ color: "#fbbf24", fontSize: 40 }} />
                 <Typography variant="h4" sx={{ fontWeight: 800 }}>AI Contest 2025</Typography>
@@ -86,7 +87,7 @@ export default function SupportCommunityPage() {
                 コンテスト詳細を見る
               </Button>
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid size={{ xs: 12, md: 5 }}>
               <Box
                 component="img"
                 src="https://images.unsplash.com/photo-1591115765373-520b7a21769b?auto=format&fit=crop&q=80&w=800"
