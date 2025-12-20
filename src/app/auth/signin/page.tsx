@@ -9,15 +9,15 @@ import Link from "next/link";
 
 export default function SignInPage() {
   const handleGoogleSignIn = async () => {
-    console.log("Googleログインボタンがクリックされました");
+    console.log("Googleログイン開始...");
     try {
-      const result = await signIn("google", { 
+      // redirect: true を指定して確実に遷移させる
+      await signIn("google", { 
         callbackUrl: "/dashboard",
         redirect: true 
       });
-      console.log("signIn result:", result);
     } catch (error) {
-      console.error("signIn error:", error);
+      console.error("サインインエラー:", error);
     }
   };
 
@@ -86,14 +86,13 @@ export default function SignInPage() {
           アカウントにログインして、AIコードレビューを始めましょう
         </Typography>
 
-        {/* Google Login Button - リンクとして実装 */}
+        {/* Google Login Button */}
         <Button
-          component="a"
-          href="/api/auth/signin/google?callbackUrl=/dashboard"
           fullWidth
           variant="outlined"
           size="large"
           startIcon={<GoogleIcon />}
+          onClick={handleGoogleSignIn}
           sx={{
             py: 2,
             color: "#fff",
@@ -101,7 +100,6 @@ export default function SignInPage() {
             textTransform: "none",
             fontSize: "1rem",
             borderRadius: 1,
-            textDecoration: "none",
             "&:hover": {
               borderColor: "#fff",
               bgcolor: "rgba(255,255,255,0.05)",
@@ -155,4 +153,3 @@ export default function SignInPage() {
     </Box>
   );
 }
-
