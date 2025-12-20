@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Box, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const features = [
   {
@@ -37,7 +37,7 @@ const cardVariants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.16, 1, 0.3, 1] as const,
+      ease: [0.16, 1, 0.3, 1],
     },
   },
 };
@@ -51,6 +51,8 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
+  const router = useRouter();
+
   return (
     <Grid item xs={12} md={4}>
       <motion.div
@@ -62,31 +64,24 @@ const FeatureCard = ({ number, title, description, link, index }: FeatureCardPro
         whileHover={{
           boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
           borderColor: "#6366f1",
-          backgroundColor: "rgba(255,255,255,0.02)",
+          backgroundColor: "rgba(255,255,255,0.05)",
+          scale: 1.02,
+        }}
+        whileTap={{ scale: 0.98 }} // クリックした瞬間に少し沈むアニメーション
+        onClick={() => {
+          console.log(`Navigating to: ${link}`);
+          router.push(link);
         }}
         style={{
           borderLeft: "1px solid rgba(255,255,255,0.2)",
           paddingLeft: "2rem",
-          paddingTop: "1rem",
-          paddingBottom: "1rem",
+          paddingTop: "2rem",
+          paddingBottom: "2rem",
           transition: "all 0.3s ease",
-          position: "relative", // リンクを全体に広げるために必要
+          cursor: "pointer",
+          height: "100%",
         }}
       >
-        {/* カード全体を覆う透明なリンク */}
-        <Link 
-          href={link} 
-          style={{ 
-            position: "absolute", 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
-            zIndex: 10, // 最前面に配置
-            cursor: "pointer" 
-          }} 
-        />
-
         <Typography
           variant="h2"
           sx={{
@@ -107,7 +102,7 @@ const FeatureCard = ({ number, title, description, link, index }: FeatureCardPro
           sx={{
             color: "rgba(255,255,255,0.5)",
             lineHeight: 1.8,
-            mb: 2,
+            mb: 3,
           }}
         >
           {description}
