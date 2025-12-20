@@ -4,7 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Box, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useRouter } from "next/navigation";
 
 const features = [
   {
@@ -51,75 +50,72 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
-  const router = useRouter();
-
   return (
     <Grid item xs={12} md={4}>
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={cardVariants}
-        transition={{ delay: index * 0.2 }}
-        whileHover={{
-          boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
-          borderColor: "#6366f1",
-          backgroundColor: "rgba(255,255,255,0.05)",
-          scale: 1.02,
-        }}
-        whileTap={{ scale: 0.98 }} // クリックした瞬間に少し沈むアニメーション
-        onClick={() => {
-          console.log(`Navigating to: ${link}`);
-          router.push(link);
-        }}
-        style={{
-          borderLeft: "1px solid rgba(255,255,255,0.2)",
-          paddingLeft: "2rem",
-          paddingTop: "2rem",
-          paddingBottom: "2rem",
-          transition: "all 0.3s ease",
-          cursor: "pointer",
-          height: "100%",
-        }}
-      >
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: "3rem",
-            fontWeight: 700,
-            mb: 2,
-            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+      {/* HTML標準のaタグを使用して、ブラウザの基本機能で遷移させる */}
+      <a href={link} style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={cardVariants}
+          transition={{ delay: index * 0.2 }}
+          whileHover={{
+            boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
+            borderColor: "#6366f1",
+            backgroundColor: "rgba(255,255,255,0.05)",
+            scale: 1.02,
+          }}
+          whileTap={{ scale: 0.98 }}
+          style={{
+            borderLeft: "1px solid rgba(255,255,255,0.2)",
+            paddingLeft: "2rem",
+            paddingTop: "2rem",
+            paddingBottom: "2rem",
+            transition: "all 0.3s ease",
+            cursor: "pointer",
+            height: "100%",
           }}
         >
-          {number}
-        </Typography>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            color: "rgba(255,255,255,0.5)",
-            lineHeight: 1.8,
-            mb: 3,
-          }}
-        >
-          {description}
-        </Typography>
-        <Typography
-          sx={{
-            color: "#6366f1",
-            fontSize: "0.875rem",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          詳細を見る →
-        </Typography>
-      </motion.div>
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: "3rem",
+              fontWeight: 700,
+              mb: 2,
+              background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            {number}
+          </Typography>
+          <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              color: "rgba(255,255,255,0.5)",
+              lineHeight: 1.8,
+              mb: 3,
+            }}
+          >
+            {description}
+          </Typography>
+          <Typography
+            sx={{
+              color: "#6366f1",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            詳細を見る →
+          </Typography>
+        </motion.div>
+      </a>
     </Grid>
   );
 };
