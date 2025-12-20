@@ -5,24 +5,29 @@ import { motion } from "framer-motion";
 import { Box, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
+import Link from "next/link";
+
 const features = [
   {
     number: "01",
     title: "AI Code Review",
     description:
       "AIが改善点を指摘し、より良い書き方を提案。プロのようなコードを書けるようになる。",
+    link: "/features/code-review",
   },
   {
     number: "02",
     title: "Learning Path",
     description:
       "初心者にも分かりやすい解説で、ステップバイステップで学習できる。",
+    link: "/features/learning-path",
   },
   {
     number: "03",
     title: "24/7 Support",
     description:
       "困った瞬間にすぐ質問して解決。24時間いつでもAIがサポート。",
+    link: "/features/support",
   },
 ];
 
@@ -42,55 +47,73 @@ interface FeatureCardProps {
   number: string;
   title: string;
   description: string;
+  link: string;
   index: number;
 }
 
-const FeatureCard = ({ number, title, description, index }: FeatureCardProps) => {
+const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
   return (
-    <Grid size={{ xs: 12, md: 4 }}>
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={cardVariants}
-        transition={{ delay: index * 0.2 }}
-        whileHover={{
-          boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
-          borderColor: "#6366f1",
-        }}
-        style={{
-          borderLeft: "1px solid rgba(255,255,255,0.2)",
-          paddingLeft: "2rem",
-          paddingTop: "1rem",
-          paddingBottom: "1rem",
-          transition: "box-shadow 0.3s ease, border-color 0.3s ease",
-        }}
-      >
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: "3rem",
-            fontWeight: 700,
-            mb: 2,
-            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+    <Grid item xs={12} md={4}>
+      <Link href={link} style={{ textDecoration: "none" }}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={cardVariants}
+          transition={{ delay: index * 0.2 }}
+          whileHover={{
+            boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
+            borderColor: "#6366f1",
+            backgroundColor: "rgba(255,255,255,0.02)",
+          }}
+          style={{
+            borderLeft: "1px solid rgba(255,255,255,0.2)",
+            paddingLeft: "2rem",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            transition: "all 0.3s ease",
+            cursor: "pointer",
           }}
         >
-          {number}
-        </Typography>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            color: "rgba(255,255,255,0.5)",
-            lineHeight: 1.8,
-          }}
-        >
-          {description}
-        </Typography>
-      </motion.div>
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: "3rem",
+              fontWeight: 700,
+              mb: 2,
+              background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            {number}
+          </Typography>
+          <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              color: "rgba(255,255,255,0.5)",
+              lineHeight: 1.8,
+              mb: 2,
+            }}
+          >
+            {description}
+          </Typography>
+          <Typography
+            sx={{
+              color: "#6366f1",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            詳細を見る →
+          </Typography>
+        </motion.div>
+      </Link>
     </Grid>
   );
 };
@@ -132,6 +155,7 @@ export default function FeatureCards() {
               number={feature.number}
               title={feature.title}
               description={feature.description}
+              link={feature.link}
               index={index}
             />
           ))}
