@@ -4,8 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Box, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const features = [
   {
@@ -52,8 +51,6 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
-  const router = useRouter();
-
   return (
     <Grid item xs={12} md={4}>
       <motion.div
@@ -67,16 +64,29 @@ const FeatureCard = ({ number, title, description, link, index }: FeatureCardPro
           borderColor: "#6366f1",
           backgroundColor: "rgba(255,255,255,0.02)",
         }}
-        onClick={() => router.push(link)}
         style={{
           borderLeft: "1px solid rgba(255,255,255,0.2)",
           paddingLeft: "2rem",
           paddingTop: "1rem",
           paddingBottom: "1rem",
           transition: "all 0.3s ease",
-          cursor: "pointer",
+          position: "relative", // リンクを全体に広げるために必要
         }}
       >
+        {/* カード全体を覆う透明なリンク */}
+        <Link 
+          href={link} 
+          style={{ 
+            position: "absolute", 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            zIndex: 10, // 最前面に配置
+            cursor: "pointer" 
+          }} 
+        />
+
         <Typography
           variant="h2"
           sx={{
@@ -165,4 +175,3 @@ export default function FeatureCards() {
     </Box>
   );
 }
-
