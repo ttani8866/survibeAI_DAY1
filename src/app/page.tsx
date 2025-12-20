@@ -7,10 +7,14 @@ import HeroSection from "@/components/HeroSection";
 import FeatureCards from "@/components/FeatureCards";
 import CTASection from "@/components/CTASection";
 import AuthHeader from "@/components/AuthHeader";
+import MerryChristmasOverlay from "@/components/christmas/MerryChristmasOverlay";
 
 export default function HomePage() {
   return (
     <Box sx={{ bgcolor: "#0a0a0a", color: "#fff" }}>
+      {/* クリスマスウェルカムアニメーション */}
+      <MerryChristmasOverlay />
+
       {/* Header */}
       <AuthHeader />
 
