@@ -45,70 +45,64 @@ interface FeatureCardProps {
 const FeatureCard = ({ number, title, description, link, index }: FeatureCardProps) => {
   return (
     <Grid size={{ xs: 12, md: 4 }}>
-      {/* HTML標準のaタグを使用して、ブラウザの基本機能で遷移させる */}
-      <a href={link} style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={cardVariants}
-          transition={{ delay: index * 0.2, duration: 0.8 }}
-          whileHover={{
+      <Box
+        component="a"
+        href={link}
+        sx={{
+          textDecoration: "none",
+          color: "inherit",
+          display: "block",
+          height: "100%",
+          borderLeft: "1px solid rgba(255,255,255,0.2)",
+          pl: 4,
+          py: 4,
+          transition: "all 0.3s ease",
+          cursor: "pointer",
+          "&:hover": {
             boxShadow: "0 0 30px rgba(99, 102, 241, 0.4)",
             borderColor: "#6366f1",
-            backgroundColor: "rgba(255,255,255,0.05)",
-            scale: 1.02,
-          }}
-          whileTap={{ scale: 0.98 }}
-          style={{
-            borderLeft: "1px solid rgba(255,255,255,0.2)",
-            paddingLeft: "2rem",
-            paddingTop: "2rem",
-            paddingBottom: "2rem",
-            transition: "all 0.3s ease",
-            cursor: "pointer",
-            height: "100%",
+            bgcolor: "rgba(255,255,255,0.05)",
+          },
+        }}
+      >
+        <Typography
+          variant="h2"
+          sx={{
+            fontSize: "3rem",
+            fontWeight: 700,
+            mb: 2,
+            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
-          <Typography
-            variant="h2"
-            sx={{
-              fontSize: "3rem",
-              fontWeight: 700,
-              mb: 2,
-              background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            {number}
-          </Typography>
-          <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
-            {title}
-          </Typography>
-          <Typography
-            sx={{
-              color: "rgba(255,255,255,0.5)",
-              lineHeight: 1.8,
-              mb: 3,
-            }}
-          >
-            {description}
-          </Typography>
-          <Typography
-            sx={{
-              color: "#6366f1",
-              fontSize: "0.875rem",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            詳細を見る →
-          </Typography>
-        </motion.div>
-      </a>
+          {number}
+        </Typography>
+        <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: "#fff" }}>
+          {title}
+        </Typography>
+        <Typography
+          sx={{
+            color: "rgba(255,255,255,0.5)",
+            lineHeight: 1.8,
+            mb: 3,
+          }}
+        >
+          {description}
+        </Typography>
+        <Typography
+          sx={{
+            color: "#6366f1",
+            fontSize: "0.875rem",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          詳細を見る →
+        </Typography>
+      </Box>
     </Grid>
   );
 };
