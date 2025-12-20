@@ -141,7 +141,6 @@ export default function AuthHeader() {
                 Contact
               </Button>
               <Button
-                component={Link}
                 href="/auth/signin"
                 variant="outlined"
                 sx={{
@@ -149,6 +148,7 @@ export default function AuthHeader() {
                   borderColor: "rgba(255,255,255,0.3)",
                   textTransform: "none",
                   px: 3,
+                  textDecoration: "none",
                   "&:hover": {
                     borderColor: "#fff",
                     bgcolor: "rgba(255,255,255,0.05)",
