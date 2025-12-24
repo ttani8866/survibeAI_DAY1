@@ -1,0 +1,6 @@
+Get-Content: C:\Users\tetsuya.tani\AppData\Local\Temp\ps-script-2387c3c4-f519-4362-adc4-93e0c9a314fd.ps1:114
+Line |
+ 114 |  cd C:\dev\survibe-day1 && type nul > check_server.txt 2>&1
+     |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'C:\dev\survibe-day1\nul' because it does not exist.
+
