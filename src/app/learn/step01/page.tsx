@@ -54,7 +54,7 @@ export default function Step01Page() {
     }
   };
 
-  const handleChoiceCorrect = () => {
+  const handleChoiceNext = () => {
     setShowChoice(false);
     setChoiceIndex((prev) => prev + 1);
     if (dialogueIndex < data.dialogues.length - 1) {
@@ -167,7 +167,7 @@ export default function Step01Page() {
                   choices={data.interactiveChoices[choiceIndex].choices}
                   correctIndex={data.interactiveChoices[choiceIndex].correctIndex}
                   explanation={data.interactiveChoices[choiceIndex].explanation}
-                  onCorrect={handleChoiceCorrect}
+                  onNext={handleChoiceNext}
                 />
               )}
 

@@ -4,18 +4,20 @@ import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 interface ChoiceButtonsProps {
   choices: string[];
   correctIndex: number;
-  onCorrect: () => void;
+  onNext: () => void;
   explanation?: string;
 }
 
 export default function ChoiceButtons({
   choices,
   correctIndex,
-  onCorrect,
+  onNext,
   explanation,
 }: ChoiceButtonsProps) {
   const [selected, setSelected] = useState<number | null>(null);
@@ -25,13 +27,14 @@ export default function ChoiceButtons({
     if (showResult) return;
     setSelected(index);
     setShowResult(true);
-
-    if (index === correctIndex) {
-      setTimeout(() => {
-        onCorrect();
-      }, 2000);
-    }
   };
+
+  const handleRetry = () => {
+    setSelected(null);
+    setShowResult(false);
+  };
+
+  const isCorrect = selected === correctIndex;
 
   return (
     <motion.div
@@ -53,9 +56,9 @@ export default function ChoiceButtons({
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {choices.map((choice, index) => {
             const isSelected = selected === index;
-            const isCorrect = index === correctIndex;
-            const showCorrect = showResult && isCorrect;
-            const showWrong = showResult && isSelected && !isCorrect;
+            const isCorrectOption = index === correctIndex;
+            const showCorrect = showResult && isCorrectOption;
+            const showWrong = showResult && isSelected && !isCorrectOption;
 
             return (
               <motion.div
@@ -66,7 +69,7 @@ export default function ChoiceButtons({
                 <Button
                   fullWidth
                   onClick={() => handleChoice(index)}
-                  disabled={showResult && !isSelected && !isCorrect}
+                  disabled={showResult && !isSelected && !isCorrectOption}
                   sx={{
                     p: 2,
                     justifyContent: "flex-start",
@@ -142,32 +145,30 @@ export default function ChoiceButtons({
                 mt: 3,
                 p: 3,
                 borderRadius: 2,
-                bgcolor:
-                  selected === correctIndex
-                    ? "rgba(16, 185, 129, 0.1)"
-                    : "rgba(239, 68, 68, 0.1)",
+                bgcolor: isCorrect
+                  ? "rgba(16, 185, 129, 0.1)"
+                  : "rgba(239, 68, 68, 0.1)",
                 border: "1px solid",
-                borderColor:
-                  selected === correctIndex
-                    ? "rgba(16, 185, 129, 0.3)"
-                    : "rgba(239, 68, 68, 0.3)",
+                borderColor: isCorrect
+                  ? "rgba(16, 185, 129, 0.3)"
+                  : "rgba(239, 68, 68, 0.3)",
               }}
             >
               <Typography
                 sx={{
                   fontWeight: 700,
-                  color: selected === correctIndex ? "#10b981" : "#ef4444",
+                  color: isCorrect ? "#10b981" : "#ef4444",
                   mb: 1,
                 }}
               >
-                {selected === correctIndex ? "🎉 正解！" : "❌ 不正解..."}
+                {isCorrect ? "🎉 正解！" : "❌ 不正解..."}
               </Typography>
               {explanation && (
                 <Typography sx={{ color: "rgba(255,255,255,0.7)", fontSize: "0.9rem" }}>
                   {explanation}
                 </Typography>
               )}
-              {selected !== correctIndex && (
+              {!isCorrect && (
                 <Typography
                   sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem", mt: 1 }}
                 >
@@ -175,10 +176,43 @@ export default function ChoiceButtons({
                 </Typography>
               )}
             </Box>
+
+            {/* Action Buttons */}
+            <Box sx={{ display: "flex", gap: 2, mt: 3, justifyContent: "flex-end" }}>
+              {!isCorrect && (
+                <Button
+                  variant="outlined"
+                  startIcon={<ReplayIcon />}
+                  onClick={handleRetry}
+                  sx={{
+                    borderColor: "rgba(255,255,255,0.3)",
+                    color: "#fff",
+                    "&:hover": {
+                      borderColor: "#fff",
+                      bgcolor: "rgba(255,255,255,0.05)",
+                    },
+                  }}
+                >
+                  もう一度
+                </Button>
+              )}
+              <Button
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                onClick={onNext}
+                sx={{
+                  bgcolor: isCorrect ? "#10b981" : "#6366f1",
+                  "&:hover": {
+                    bgcolor: isCorrect ? "#0d9668" : "#5558e3",
+                  },
+                }}
+              >
+                次へ進む
+              </Button>
+            </Box>
           </motion.div>
         )}
       </Box>
     </motion.div>
   );
 }
-
