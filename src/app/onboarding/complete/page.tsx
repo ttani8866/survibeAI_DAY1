@@ -144,6 +144,8 @@ export default function CompletePage() {
         {/* CTAs */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Button
+            component={Link}
+            href="/code-review"
             fullWidth
             variant="contained"
             size="large"
@@ -165,6 +167,8 @@ export default function CompletePage() {
           </Button>
 
           <Button
+            component={Link}
+            href="/features/learning-path"
             fullWidth
             variant="outlined"
             size="large"

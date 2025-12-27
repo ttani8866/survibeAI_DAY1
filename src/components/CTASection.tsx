@@ -73,7 +73,7 @@ export default function CTASection() {
               mb: 5,
             }}
           >
-            今すぐ無料で始めて、コーディングスキルを次のレベルへ。
+            今すぐ始めて、コーディングスキルを次のレベルへ。
           </Box>
 
           {/* パルスアニメーション付きボタン */}
@@ -108,7 +108,7 @@ export default function CTASection() {
                 },
               }}
             >
-              無料で始める
+              はじめる
             </Button>
           </motion.div>
         </motion.div>

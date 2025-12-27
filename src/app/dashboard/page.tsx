@@ -13,7 +13,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import AuthHeader from "@/components/AuthHeader";
+import CodeIcon from "@mui/icons-material/Code";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import ChatIcon from "@mui/icons-material/Chat";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -136,23 +141,78 @@ export default function DashboardPage() {
           </Grid>
         </Grid>
 
-        {/* Quick Start */}
-        <Box
-          sx={{
-            p: 4,
-            mt: 4,
-            borderRadius: 2,
-            bgcolor: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.1)",
-          }}
-        >
-          <Typography variant="h6" fontWeight={600} gutterBottom>
-            クイックスタート
-          </Typography>
-          <Typography sx={{ color: "rgba(255,255,255,0.6)" }}>
-            コードレビュー機能は現在開発中です。お楽しみに！
-          </Typography>
-        </Box>
+        {/* Quick Actions */}
+        <Typography variant="h6" fontWeight={600} sx={{ mt: 4, mb: 2 }}>
+          クイックアクション
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Button
+              component={Link}
+              href="/code-review"
+              fullWidth
+              variant="contained"
+              startIcon={<CodeIcon />}
+              sx={{
+                py: 3,
+                bgcolor: "#6366f1",
+                borderRadius: 2,
+                textTransform: "none",
+                fontSize: "1rem",
+                fontWeight: 600,
+                "&:hover": { bgcolor: "#5558e3" },
+              }}
+            >
+              コードをレビューする
+            </Button>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Button
+              component={Link}
+              href="/features/learning-path"
+              fullWidth
+              variant="outlined"
+              startIcon={<MenuBookIcon />}
+              sx={{
+                py: 3,
+                borderColor: "rgba(255,255,255,0.2)",
+                color: "#fff",
+                borderRadius: 2,
+                textTransform: "none",
+                fontSize: "1rem",
+                "&:hover": {
+                  borderColor: "#6366f1",
+                  bgcolor: "rgba(99, 102, 241, 0.1)",
+                },
+              }}
+            >
+              学習を続ける
+            </Button>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Button
+              component={Link}
+              href="/ai-chat"
+              fullWidth
+              variant="outlined"
+              startIcon={<ChatIcon />}
+              sx={{
+                py: 3,
+                borderColor: "rgba(255,255,255,0.2)",
+                color: "#fff",
+                borderRadius: 2,
+                textTransform: "none",
+                fontSize: "1rem",
+                "&:hover": {
+                  borderColor: "#10b981",
+                  bgcolor: "rgba(16, 185, 129, 0.1)",
+                },
+              }}
+            >
+              AIに聞く
+            </Button>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );

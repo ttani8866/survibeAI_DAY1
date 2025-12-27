@@ -300,7 +300,7 @@ export default function HeroSection() {
                 },
               }}
             >
-              無料で始める
+              はじめる
             </Button>
             <Button
               component={Link}
