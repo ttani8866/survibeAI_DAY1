@@ -24,7 +24,7 @@ const steps = [
     content: "何を作る？誰のため？サービス設計の基本を学ぼう。",
     phase: "企画",
     phaseColor: "#f59e0b",
-    status: "available", // available, locked, completed
+    status: "available",
   },
   {
     step: "02",
@@ -32,7 +32,7 @@ const steps = [
     content: "画面構成とユーザーフローを設計。UXの基礎を学ぼう。",
     phase: "設計",
     phaseColor: "#8b5cf6",
-    status: "locked",
+    status: "available",
   },
   {
     step: "03",
@@ -40,7 +40,7 @@ const steps = [
     content: "色、フォント、雰囲気。UIデザインの基礎を学ぼう。",
     phase: "設計",
     phaseColor: "#8b5cf6",
-    status: "locked",
+    status: "available",
   },
   {
     step: "04",
@@ -48,7 +48,7 @@ const steps = [
     content: "VS Code、Node.js、Git。開発環境を整えよう。",
     phase: "準備",
     phaseColor: "#10b981",
-    status: "locked",
+    status: "available",
   },
   {
     step: "05",
@@ -56,7 +56,7 @@ const steps = [
     content: "デザインをコードに。Webページの見た目を作ろう。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "locked",
+    status: "available",
   },
   {
     step: "06",
@@ -64,7 +64,7 @@ const steps = [
     content: "クリック、入力、表示切替。インタラクションを実装。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "locked",
+    status: "available",
   },
   {
     step: "07",
@@ -72,7 +72,7 @@ const steps = [
     content: "HTTP、API、サーバーとクライアント。通信の基礎。",
     phase: "理解",
     phaseColor: "#ec4899",
-    status: "locked",
+    status: "available",
   },
   {
     step: "08",
@@ -80,7 +80,7 @@ const steps = [
     content: "コンポーネント設計。モダンなフロントエンド開発。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "locked",
+    status: "available",
   },
   {
     step: "09",
@@ -88,7 +88,7 @@ const steps = [
     content: "OpenAI API連携。AIをアプリに組み込もう。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "locked",
+    status: "available",
   },
   {
     step: "10",
@@ -96,7 +96,7 @@ const steps = [
     content: "Vercelでデプロイ。あなたのアプリを世界へ。",
     phase: "公開",
     phaseColor: "#ef4444",
-    status: "locked",
+    status: "available",
   },
 ];
 

@@ -18,33 +18,87 @@ import DialogueBox from "@/components/learn/DialogueBox";
 import ChoiceButtons from "@/components/learn/ChoiceButtons";
 import ProgressBar from "@/components/learn/ProgressBar";
 import QuizCard from "@/components/quiz/QuizCard";
-import { step01Data } from "@/data/steps/step01";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import QuizIcon from "@mui/icons-material/Quiz";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+
+// データインポート
+import { step01Data } from "@/data/steps/step01";
+import { step02Data } from "@/data/steps/step02";
+import { step03Data } from "@/data/steps/step03";
+import { step04Data } from "@/data/steps/step04";
+import { step05Data } from "@/data/steps/step05";
+import { step06Data } from "@/data/steps/step06";
+import { step07Data } from "@/data/steps/step07";
+import { step08Data } from "@/data/steps/step08";
+import { step09Data } from "@/data/steps/step09";
+import { step10Data } from "@/data/steps/step10";
+
+const stepsData: { [key: string]: typeof step01Data } = {
+  step01: step01Data,
+  step02: step02Data,
+  step03: step03Data,
+  step04: step04Data,
+  step05: step05Data,
+  step06: step06Data,
+  step07: step07Data,
+  step08: step08Data,
+  step09: step09Data,
+  step10: step10Data,
+};
 
 type LearningPhase = "lesson" | "quiz" | "complete";
 
-export default function Step01Page() {
+export default function StepPage() {
+  const params = useParams();
+  const stepParam = params.step as string;
+  const data = stepsData[stepParam];
+
   const [phase, setPhase] = useState<LearningPhase>("lesson");
   const [dialogueIndex, setDialogueIndex] = useState(0);
   const [choiceIndex, setChoiceIndex] = useState(0);
   const [showChoice, setShowChoice] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
 
-  const data = step01Data;
+  // データが見つからない場合
+  if (!data) {
+    return (
+      <Box sx={{ bgcolor: "#0a0a0a", minHeight: "100vh", color: "#fff", pt: 10 }}>
+        <AuthHeader />
+        <Container maxWidth="md" sx={{ py: 8, textAlign: "center" }}>
+          <Typography variant="h4" sx={{ mb: 4 }}>
+            ページが見つかりません
+          </Typography>
+          <Button
+            component={Link}
+            href="/features/learning-path"
+            variant="contained"
+            sx={{ bgcolor: "#6366f1" }}
+          >
+            学習パスに戻る
+          </Button>
+        </Container>
+      </Box>
+    );
+  }
+
+  const stepNumber = parseInt(data.step);
+  const nextStep = stepNumber < 10 ? `step${String(stepNumber + 1).padStart(2, "0")}` : null;
 
   // 対話の進行
   const handleNextDialogue = () => {
     // 特定のポイントで選択問題を表示
-    if (dialogueIndex === 2 && choiceIndex === 0 && !showChoice) {
-      setShowChoice(true);
-      return;
-    }
-    if (dialogueIndex === 4 && choiceIndex === 1 && !showChoice) {
+    if (
+      data.interactiveChoices &&
+      data.interactiveChoices[choiceIndex] &&
+      dialogueIndex === Math.floor((data.dialogues.length / (data.interactiveChoices.length + 1)) * (choiceIndex + 1)) - 1 &&
+      !showChoice
+    ) {
       setShowChoice(true);
       return;
     }
@@ -68,6 +122,7 @@ export default function Step01Page() {
   };
 
   const isLastDialogue = dialogueIndex === data.dialogues.length - 1;
+  const isLastStep = stepNumber === 10;
 
   return (
     <Box sx={{ bgcolor: "#0a0a0a", minHeight: "100vh", color: "#fff", pt: 10 }}>
@@ -162,7 +217,7 @@ export default function Step01Page() {
               </Box>
 
               {/* Interactive Choice */}
-              {showChoice && data.interactiveChoices[choiceIndex] && (
+              {showChoice && data.interactiveChoices && data.interactiveChoices[choiceIndex] && (
                 <ChoiceButtons
                   choices={data.interactiveChoices[choiceIndex].choices}
                   correctIndex={data.interactiveChoices[choiceIndex].correctIndex}
@@ -228,19 +283,21 @@ export default function Step01Page() {
                 sx={{
                   p: 6,
                   bgcolor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(16, 185, 129, 0.3)",
+                  border: isLastStep
+                    ? "1px solid rgba(245, 158, 11, 0.5)"
+                    : "1px solid rgba(16, 185, 129, 0.3)",
                   borderRadius: 4,
                   textAlign: "center",
                 }}
               >
                 <Typography variant="h2" sx={{ mb: 2 }}>
-                  🎉
+                  {isLastStep ? "🏆" : "🎉"}
                 </Typography>
                 <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-                  STEP 01 完了！
+                  {isLastStep ? "全STEP完了！" : `STEP ${data.step} 完了！`}
                 </Typography>
                 <Typography sx={{ color: "rgba(255,255,255,0.6)", mb: 4 }}>
-                  「アイデア・要件定義」をマスターしました！
+                  「{data.title}」をマスターしました！
                 </Typography>
 
                 {/* Summary */}
@@ -300,13 +357,36 @@ export default function Step01Page() {
                   </Box>
                   <Box sx={{ textAlign: "center" }}>
                     <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                      🎯
+                      {isLastStep ? <EmojiEventsIcon sx={{ color: "#f59e0b", fontSize: 32 }} /> : "🎯"}
                     </Typography>
                     <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}>
-                      First Step バッジ
+                      {isLastStep ? "Master バッジ" : `Step ${data.step} バッジ`}
                     </Typography>
                   </Box>
                 </Box>
+
+                {isLastStep && (
+                  <Box
+                    sx={{
+                      mb: 4,
+                      p: 4,
+                      borderRadius: 2,
+                      background: "linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1))",
+                      border: "1px solid rgba(245, 158, 11, 0.3)",
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#f59e0b" }}>
+                      🎊 おめでとうございます！
+                    </Typography>
+                    <Typography sx={{ color: "rgba(255,255,255,0.8)" }}>
+                      10STEPすべてを完了しました！
+                      <br />
+                      これであなたも立派なWeb開発者です。
+                      <br />
+                      学んだことを活かして、どんどん作っていきましょう！
+                    </Typography>
+                  </Box>
+                )}
 
                 <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
                   <Button
@@ -321,18 +401,33 @@ export default function Step01Page() {
                   >
                     学習パスに戻る
                   </Button>
-                  <Button
-                    component={Link}
-                    href="/learn/step02"
-                    variant="contained"
-                    endIcon={<ArrowForwardIcon />}
-                    sx={{
-                      bgcolor: "#6366f1",
-                      "&:hover": { bgcolor: "#5558e3" },
-                    }}
-                  >
-                    STEP 02へ進む
-                  </Button>
+                  {nextStep && (
+                    <Button
+                      component={Link}
+                      href={`/learn/${nextStep}`}
+                      variant="contained"
+                      endIcon={<ArrowForwardIcon />}
+                      sx={{
+                        bgcolor: "#6366f1",
+                        "&:hover": { bgcolor: "#5558e3" },
+                      }}
+                    >
+                      STEP {String(stepNumber + 1).padStart(2, "0")}へ進む
+                    </Button>
+                  )}
+                  {isLastStep && (
+                    <Button
+                      component={Link}
+                      href="/ai-chat"
+                      variant="contained"
+                      sx={{
+                        bgcolor: "#f59e0b",
+                        "&:hover": { bgcolor: "#d97706" },
+                      }}
+                    >
+                      AIに聞いてみる
+                    </Button>
+                  )}
                 </Box>
               </Paper>
             </motion.div>
