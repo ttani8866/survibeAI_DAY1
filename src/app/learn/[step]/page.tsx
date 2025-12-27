@@ -26,6 +26,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { completeStep } from "@/lib/progress";
 
 // データインポート
 import { step01Data } from "@/data/steps/step01";
@@ -119,6 +120,10 @@ export default function StepPage() {
   const handleQuizComplete = (score: number) => {
     setQuizScore(score);
     setPhase("complete");
+    
+    // XPを保存（STEP完了報酬 + クイズスコア）
+    const totalXP = data.xpReward + score * 10 + (score === data.quiz.length ? 50 : 0);
+    completeStep(stepParam, totalXP);
   };
 
   const isLastDialogue = dialogueIndex === data.dialogues.length - 1;

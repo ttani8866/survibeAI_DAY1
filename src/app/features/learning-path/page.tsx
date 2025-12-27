@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -9,22 +9,29 @@ import {
   Paper,
   Chip,
   Button,
+  LinearProgress,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import AuthHeader from "@/components/AuthHeader";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ReplayIcon from "@mui/icons-material/Replay";
 import Link from "next/link";
+import {
+  getProgress,
+  UserProgress,
+  getXpForNextLevel,
+  isStepCompleted,
+} from "@/lib/progress";
 
-const steps = [
+const stepsConfig = [
   {
     step: "01",
     title: "アイデア・要件定義",
     content: "何を作る？誰のため？サービス設計の基本を学ぼう。",
     phase: "企画",
     phaseColor: "#f59e0b",
-    status: "available",
   },
   {
     step: "02",
@@ -32,7 +39,6 @@ const steps = [
     content: "画面構成とユーザーフローを設計。UXの基礎を学ぼう。",
     phase: "設計",
     phaseColor: "#8b5cf6",
-    status: "available",
   },
   {
     step: "03",
@@ -40,7 +46,6 @@ const steps = [
     content: "色、フォント、雰囲気。UIデザインの基礎を学ぼう。",
     phase: "設計",
     phaseColor: "#8b5cf6",
-    status: "available",
   },
   {
     step: "04",
@@ -48,7 +53,6 @@ const steps = [
     content: "VS Code、Node.js、Git。開発環境を整えよう。",
     phase: "準備",
     phaseColor: "#10b981",
-    status: "available",
   },
   {
     step: "05",
@@ -56,7 +60,6 @@ const steps = [
     content: "デザインをコードに。Webページの見た目を作ろう。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "available",
   },
   {
     step: "06",
@@ -64,7 +67,6 @@ const steps = [
     content: "クリック、入力、表示切替。インタラクションを実装。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "available",
   },
   {
     step: "07",
@@ -72,7 +74,6 @@ const steps = [
     content: "HTTP、API、サーバーとクライアント。通信の基礎。",
     phase: "理解",
     phaseColor: "#ec4899",
-    status: "available",
   },
   {
     step: "08",
@@ -80,7 +81,6 @@ const steps = [
     content: "コンポーネント設計。モダンなフロントエンド開発。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "available",
   },
   {
     step: "09",
@@ -88,7 +88,6 @@ const steps = [
     content: "OpenAI API連携。AIをアプリに組み込もう。",
     phase: "実装",
     phaseColor: "#6366f1",
-    status: "available",
   },
   {
     step: "10",
@@ -96,7 +95,6 @@ const steps = [
     content: "Vercelでデプロイ。あなたのアプリを世界へ。",
     phase: "公開",
     phaseColor: "#ef4444",
-    status: "available",
   },
 ];
 
@@ -106,7 +104,7 @@ interface StepCardProps {
   content: string;
   phase: string;
   phaseColor: string;
-  status: string;
+  isCompleted: boolean;
   index: number;
 }
 
@@ -116,12 +114,9 @@ const StepCard = ({
   content,
   phase,
   phaseColor,
-  status,
+  isCompleted,
   index,
 }: StepCardProps) => {
-  const isLocked = status === "locked";
-  const isCompleted = status === "completed";
-
   return (
     <motion.div
       initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
@@ -132,24 +127,25 @@ const StepCard = ({
       <Paper
         sx={{
           p: 4,
-          bgcolor: isLocked
-            ? "rgba(255,255,255,0.02)"
+          bgcolor: isCompleted
+            ? "rgba(16, 185, 129, 0.05)"
             : "rgba(255,255,255,0.03)",
           border: "1px solid",
-          borderColor: isLocked
-            ? "rgba(255,255,255,0.05)"
+          borderColor: isCompleted
+            ? "rgba(16, 185, 129, 0.3)"
             : "rgba(255,255,255,0.1)",
           color: "#fff",
           borderRadius: 4,
           display: "flex",
           alignItems: "center",
           gap: 4,
-          opacity: isLocked ? 0.6 : 1,
           transition: "all 0.3s ease",
           "&:hover": {
-            borderColor: isLocked ? "rgba(255,255,255,0.05)" : phaseColor,
-            transform: isLocked ? "none" : "translateY(-2px)",
-            boxShadow: isLocked ? "none" : `0 10px 40px ${phaseColor}20`,
+            borderColor: isCompleted ? "rgba(16, 185, 129, 0.5)" : phaseColor,
+            transform: "translateY(-2px)",
+            boxShadow: isCompleted
+              ? "0 10px 40px rgba(16, 185, 129, 0.1)"
+              : `0 10px 40px ${phaseColor}20`,
           },
         }}
       >
@@ -158,7 +154,7 @@ const StepCard = ({
           variant="h3"
           sx={{
             fontWeight: 900,
-            color: isLocked ? "rgba(255,255,255,0.1)" : `${phaseColor}50`,
+            color: isCompleted ? "rgba(16, 185, 129, 0.5)" : `${phaseColor}50`,
             minWidth: 80,
           }}
         >
@@ -186,6 +182,20 @@ const StepCard = ({
                 fontSize: "0.7rem",
               }}
             />
+            {isCompleted && (
+              <Chip
+                icon={<CheckCircleIcon sx={{ fontSize: 16 }} />}
+                label="完了"
+                size="small"
+                sx={{
+                  bgcolor: "rgba(16, 185, 129, 0.2)",
+                  color: "#10b981",
+                  fontWeight: 600,
+                  fontSize: "0.7rem",
+                  "& .MuiChip-icon": { color: "#10b981" },
+                }}
+              />
+            )}
             <Typography
               variant="h5"
               sx={{
@@ -193,21 +203,15 @@ const StepCard = ({
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                color: isLocked ? "rgba(255,255,255,0.4)" : "#fff",
+                color: "#fff",
               }}
             >
-              {isCompleted && <CheckCircleIcon sx={{ color: "#10b981" }} />}
-              {isLocked && (
-                <LockIcon sx={{ color: "rgba(255,255,255,0.3)", fontSize: 20 }} />
-              )}
               {title}
             </Typography>
           </Box>
           <Typography
             sx={{
-              color: isLocked
-                ? "rgba(255,255,255,0.3)"
-                : "rgba(255,255,255,0.6)",
+              color: "rgba(255,255,255,0.6)",
             }}
           >
             {content}
@@ -215,33 +219,47 @@ const StepCard = ({
         </Box>
 
         {/* Action Button */}
-        {!isLocked && (
-          <Button
-            component={Link}
-            href={`/learn/step${step}`}
-            variant="contained"
-            endIcon={<PlayArrowIcon />}
-            sx={{
-              bgcolor: phaseColor,
-              color: "#fff",
-              textTransform: "none",
-              fontWeight: 600,
-              px: 3,
-              "&:hover": {
-                bgcolor: phaseColor,
-                filter: "brightness(1.1)",
-              },
-            }}
-          >
-            {isCompleted ? "復習する" : "学習する"}
-          </Button>
-        )}
+        <Button
+          component={Link}
+          href={`/learn/step${step}`}
+          variant="contained"
+          startIcon={isCompleted ? <ReplayIcon /> : <PlayArrowIcon />}
+          sx={{
+            bgcolor: isCompleted ? "rgba(255,255,255,0.1)" : phaseColor,
+            color: "#fff",
+            textTransform: "none",
+            fontWeight: 600,
+            px: 3,
+            "&:hover": {
+              bgcolor: isCompleted ? "rgba(255,255,255,0.2)" : phaseColor,
+              filter: isCompleted ? "none" : "brightness(1.1)",
+            },
+          }}
+        >
+          {isCompleted ? "復習する" : "学習する"}
+        </Button>
       </Paper>
     </motion.div>
   );
 };
 
 export default function LearningPathPage() {
+  const [progress, setProgress] = useState<UserProgress | null>(null);
+
+  useEffect(() => {
+    setProgress(getProgress());
+  }, []);
+
+  const completedCount = progress?.completedSteps.length || 0;
+  const currentXP = progress?.xp || 0;
+  const currentLevel = progress?.level || 1;
+  const nextLevelXP = getXpForNextLevel(currentLevel);
+  const prevLevelXP = currentLevel > 1 ? getXpForNextLevel(currentLevel - 1) : 0;
+  const levelProgress =
+    nextLevelXP > prevLevelXP
+      ? ((currentXP - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100
+      : 0;
+
   return (
     <Box
       sx={{ bgcolor: "#0a0a0a", minHeight: "100vh", color: "#fff", pt: 10 }}
@@ -293,7 +311,7 @@ export default function LearningPathPage() {
               display: "flex",
               justifyContent: "center",
               gap: 4,
-              mb: 8,
+              mb: 4,
               flexWrap: "wrap",
             }}
           >
@@ -307,9 +325,11 @@ export default function LearningPathPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                0/10
+                {completedCount}/10
               </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}>
+              <Typography
+                sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}
+              >
                 完了STEP
               </Typography>
             </Box>
@@ -323,9 +343,11 @@ export default function LearningPathPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Lv.1
+                Lv.{currentLevel}
               </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}>
+              <Typography
+                sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}
+              >
                 現在レベル
               </Typography>
             </Box>
@@ -339,18 +361,93 @@ export default function LearningPathPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                0
+                {currentXP}
               </Typography>
-              <Typography sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}>
+              <Typography
+                sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.875rem" }}
+              >
                 獲得XP
               </Typography>
             </Box>
           </Box>
+
+          {/* Level Progress Bar */}
+          {progress && (
+            <Box sx={{ maxWidth: 400, mx: "auto", mb: 8 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 1,
+                }}
+              >
+                <Typography
+                  sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem" }}
+                >
+                  Lv.{currentLevel}
+                </Typography>
+                <Typography
+                  sx={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem" }}
+                >
+                  {currentXP} / {nextLevelXP} XP
+                </Typography>
+              </Box>
+              <LinearProgress
+                variant="determinate"
+                value={Math.min(levelProgress, 100)}
+                sx={{
+                  height: 8,
+                  borderRadius: 4,
+                  bgcolor: "rgba(255,255,255,0.1)",
+                  "& .MuiLinearProgress-bar": {
+                    borderRadius: 4,
+                    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+                  },
+                }}
+              />
+            </Box>
+          )}
+
+          {/* Badges */}
+          {progress && progress.badges.length > 0 && (
+            <Box sx={{ textAlign: "center", mb: 8 }}>
+              <Typography
+                sx={{
+                  color: "rgba(255,255,255,0.5)",
+                  fontSize: "0.875rem",
+                  mb: 2,
+                }}
+              >
+                獲得バッジ
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 2,
+                  flexWrap: "wrap",
+                }}
+              >
+                {progress.badges.map((badge, idx) => (
+                  <Chip
+                    key={idx}
+                    label={badge}
+                    sx={{
+                      bgcolor: "rgba(245, 158, 11, 0.1)",
+                      color: "#f59e0b",
+                      border: "1px solid rgba(245, 158, 11, 0.3)",
+                      fontWeight: 600,
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          )}
         </motion.div>
 
         {/* Steps */}
         <Stack spacing={3}>
-          {steps.map((item, index) => (
+          {stepsConfig.map((item, index) => (
             <StepCard
               key={item.step}
               step={item.step}
@@ -358,7 +455,11 @@ export default function LearningPathPage() {
               content={item.content}
               phase={item.phase}
               phaseColor={item.phaseColor}
-              status={item.status}
+              isCompleted={
+                progress
+                  ? isStepCompleted(`step${item.step}`)
+                  : false
+              }
               index={index}
             />
           ))}
@@ -377,23 +478,38 @@ export default function LearningPathPage() {
               p: 6,
               borderRadius: 4,
               background:
-                "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
-              border: "1px solid rgba(99, 102, 241, 0.3)",
+                completedCount === 10
+                  ? "linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%)"
+                  : "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
+              border:
+                completedCount === 10
+                  ? "1px solid rgba(245, 158, 11, 0.3)"
+                  : "1px solid rgba(99, 102, 241, 0.3)",
               textAlign: "center",
             }}
           >
             <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
-              🎯 ゴール
+              {completedCount === 10 ? "🏆 全STEP完了！" : "🎯 ゴール"}
             </Typography>
             <Typography
               sx={{ color: "rgba(255,255,255,0.7)", fontSize: "1.125rem" }}
             >
-              10STEPを完了すると、あなただけの
-              <br />
-              <strong style={{ color: "#fff" }}>
-                「生成AIラーニングアプリ」
-              </strong>
-              が完成し、世界に公開できます！
+              {completedCount === 10 ? (
+                <>
+                  おめでとうございます！あなたは
+                  <strong style={{ color: "#f59e0b" }}>マスター</strong>
+                  になりました！
+                </>
+              ) : (
+                <>
+                  10STEPを完了すると、あなただけの
+                  <br />
+                  <strong style={{ color: "#fff" }}>
+                    「生成AIラーニングアプリ」
+                  </strong>
+                  が完成し、世界に公開できます！
+                </>
+              )}
             </Typography>
           </Box>
         </motion.div>
