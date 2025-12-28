@@ -12,9 +12,9 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith(path)
   );
 
-  // 管理者専用パス
+  // 管理者専用パス（/admin/forbidden は除外）
   const adminPaths = ["/admin"];
-  const isAdminPath = adminPaths.some((path) => pathname.startsWith(path));
+  const isAdminPath = adminPaths.some((path) => pathname.startsWith(path)) && pathname !== "/admin/forbidden";
 
   // 認証ページ
   const authPaths = ["/auth/signin"];
