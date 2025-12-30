@@ -70,23 +70,26 @@ const handler = NextAuth({
       }
     },
     async jwt({ token, user }) {
-      // 初回ログイン時にDBからユーザー情報を取得
+      // 初回ログイン時
       if (user?.email) {
+        // ADMIN_EMAILSから直接判定（DB接続の有無に関わらず必ず設定）
+        const adminEmails = (process.env.ADMIN_EMAILS || "")
+          .split(",")
+          .map((email) => email.trim().toLowerCase())
+          .filter((email) => email);
+        const isAdmin = adminEmails.includes(user.email?.toLowerCase() || "");
+        token.role = isAdmin ? "admin" : "user";
+        token.email = user.email;
+        
+        // DBからユーザーID取得（失敗しても続行）
         try {
           await connectDB();
           const dbUser = await User.findOne({ email: user.email });
           if (dbUser) {
             token.id = dbUser._id.toString();
-            // ADMIN_EMAILSから直接判定（DBの値より優先）
-            const adminEmails = (process.env.ADMIN_EMAILS || "")
-              .split(",")
-              .map((email) => email.trim().toLowerCase())
-              .filter((email) => email);
-            const isAdmin = adminEmails.includes(user.email?.toLowerCase() || "");
-            token.role = isAdmin ? "admin" : "user";
           }
         } catch (error) {
-          console.error("JWT callback error:", error);
+          console.error("JWT callback DB error:", error);
         }
       }
       return token;
