@@ -301,7 +301,7 @@ export default function NewYearOverlay() {
                   mb: 2,
                 }}
               >
-                🐍 2025 🐍
+                🐴 2026 🐴
               </Box>
             </motion.div>
 

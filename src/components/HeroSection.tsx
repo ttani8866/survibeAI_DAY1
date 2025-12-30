@@ -1,21 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Box, Container, Typography, Button } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Link from "next/link";
-
-// 雪の結晶の型定義
-interface Snowflake {
-  id: number;
-  x: number;
-  size: number;
-  duration: number;
-  delay: number;
-  opacity: number;
-  sway: number;
-}
 
 // 文字アニメーション用Variants
 const containerVariants = {
@@ -44,99 +33,6 @@ const fadeInVariants = {
   },
 };
 
-// 雪のアニメーションコンポーネント
-const Snowfall = () => {
-  const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
-
-  useEffect(() => {
-    const newSnowflakes: Snowflake[] = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      size: 4 + Math.random() * 12, // 4px〜16pxのバリエーション
-      duration: 8 + Math.random() * 12, // 8〜20秒で落下
-      delay: Math.random() * 10,
-      opacity: 0.3 + Math.random() * 0.5, // 0.3〜0.8の透明度
-      sway: 20 + Math.random() * 40, // 左右の揺れ幅
-    }));
-    setSnowflakes(newSnowflakes);
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: "hidden",
-        pointerEvents: "none",
-      }}
-    >
-      {snowflakes.map((flake) => (
-        <motion.div
-          key={flake.id}
-          initial={{ y: -20, x: 0, opacity: 0 }}
-          animate={{
-            y: "110vh",
-            x: [0, flake.sway, -flake.sway, 0],
-            opacity: [0, flake.opacity, flake.opacity, 0],
-          }}
-          transition={{
-            duration: flake.duration,
-            delay: flake.delay,
-            repeat: Infinity,
-            ease: "linear",
-            x: {
-              duration: flake.duration / 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
-          }}
-          style={{
-            position: "absolute",
-            left: `${flake.x}%`,
-            width: flake.size,
-            height: flake.size,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, #fff 0%, rgba(255,255,255,0.6) 50%, transparent 100%)",
-            boxShadow: `0 0 ${flake.size}px rgba(255,255,255,0.3)`,
-          }}
-        />
-      ))}
-    </Box>
-  );
-};
-
-// 小さなクリスマスツリー（CODE INNOVATORの左上用）
-const MiniChristmasTree = () => {
-  return (
-    <Box
-      sx={{
-        display: "inline-flex",
-        flexDirection: "column",
-        alignItems: "center",
-        opacity: 0.6,
-        mr: 2,
-        transform: "translateY(-10px)",
-      }}
-    >
-      {/* 星 */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{
-          fontSize: "16px",
-          marginBottom: "-2px",
-        }}
-      >
-        ⭐
-      </motion.div>
-      {/* ツリー本体（絵文字） */}
-      <Box sx={{ fontSize: "40px", lineHeight: 1 }}>🎄</Box>
-    </Box>
-  );
-};
 
 export default function HeroSection() {
   const titleLine1 = "CODE";
@@ -154,7 +50,7 @@ export default function HeroSection() {
         overflow: "hidden",
       }}
     >
-      {/* 背景グラデーション - クリスマスカラー */}
+      {/* 背景グラデーション */}
       <Box
         sx={{
           position: "absolute",
@@ -163,13 +59,10 @@ export default function HeroSection() {
           right: 0,
           bottom: 0,
           background:
-            "radial-gradient(ellipse at 80% 20%, rgba(220, 20, 60, 0.1) 0%, transparent 40%), radial-gradient(ellipse at 20% 80%, rgba(34, 139, 34, 0.1) 0%, transparent 40%)",
+            "radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%), radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%)",
           pointerEvents: "none",
         }}
       />
-
-      {/* 雪のアニメーション */}
-      <Snowfall />
 
 
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
@@ -194,15 +87,13 @@ export default function HeroSection() {
             </Typography>
           </motion.div>
 
-          {/* CODE - 1文字ずつアニメーション + ツリー */}
+          {/* CODE - 1文字ずつアニメーション */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={containerVariants}
             style={{ display: "flex", alignItems: "flex-end", overflow: "hidden" }}
           >
-            {/* 左上のクリスマスツリー */}
-            <MiniChristmasTree />
             {titleLine1.split("").map((char, index) => (
               <motion.span
                 key={index}
