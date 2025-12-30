@@ -8,13 +8,13 @@ import FeatureCards from "@/components/FeatureCards";
 import HowItWorks from "@/components/HowItWorks";
 import CTASection from "@/components/CTASection";
 import AuthHeader from "@/components/AuthHeader";
-import MerryChristmasOverlay from "@/components/christmas/MerryChristmasOverlay";
+import NewYearOverlay from "@/components/newyear/NewYearOverlay";
 
 export default function HomePage() {
   return (
     <Box sx={{ bgcolor: "#0a0a0a", color: "#fff" }}>
-      {/* クリスマスウェルカムアニメーション */}
-      <MerryChristmasOverlay />
+      {/* 正月ウェルカムアニメーション */}
+      <NewYearOverlay />
 
       {/* Header */}
       <AuthHeader />
