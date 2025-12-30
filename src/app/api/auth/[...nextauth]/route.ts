@@ -70,7 +70,13 @@ const handler = NextAuth({
           const dbUser = await User.findOne({ email: user.email });
           if (dbUser) {
             token.id = dbUser._id.toString();
-            token.role = dbUser.role;
+            // ADMIN_EMAILSから直接判定（DBの値より優先）
+            const adminEmails = (process.env.ADMIN_EMAILS || "")
+              .split(",")
+              .map((email) => email.trim().toLowerCase())
+              .filter((email) => email);
+            const isAdmin = adminEmails.includes(user.email?.toLowerCase() || "");
+            token.role = isAdmin ? "admin" : "user";
           }
         } catch (error) {
           console.error("JWT callback error:", error);
