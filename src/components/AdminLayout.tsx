@@ -239,6 +239,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               width: DRAWER_WIDTH,
               bgcolor: "#111111",
               borderRight: "1px solid rgba(255,255,255,0.1)",
+              height: "100vh",
             },
           }}
           open
