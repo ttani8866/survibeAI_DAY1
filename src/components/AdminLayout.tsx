@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import {
   Box,
   Drawer,
@@ -24,6 +25,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import EmailIcon from "@mui/icons-material/Email";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const DRAWER_WIDTH = 260;
 
@@ -130,6 +132,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           sx={{
             borderRadius: 2,
             color: "rgba(255,255,255,0.7)",
+            mb: 1,
             "&:hover": {
               bgcolor: "rgba(255,255,255,0.05)",
             },
@@ -140,6 +143,24 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </ListItemIcon>
           <ListItemText
             primary="サイトに戻る"
+            primaryTypographyProps={{ fontSize: "0.9rem" }}
+          />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => signOut({ callbackUrl: "/" })}
+          sx={{
+            borderRadius: 2,
+            color: "#ef4444",
+            "&:hover": {
+              bgcolor: "rgba(239, 68, 68, 0.1)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "#ef4444", minWidth: 40 }}>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="ログアウト"
             primaryTypographyProps={{ fontSize: "0.9rem" }}
           />
         </ListItemButton>
