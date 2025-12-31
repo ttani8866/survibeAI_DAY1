@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   debug: true,
   providers: [
     GoogleProvider({
@@ -103,6 +103,8 @@ const handler = NextAuth({
       return session;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
