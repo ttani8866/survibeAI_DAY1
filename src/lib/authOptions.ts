@@ -33,7 +33,8 @@ export const authOptions: NextAuthOptions = {
           .filter((email) => email);
 
         const isAdmin = adminEmails.includes(user.email?.toLowerCase() || "");
-        const userRole = isAdmin ? "admin" : "user";
+        // 開発・デモ用：ログインしていれば全員管理者にする（本来はisAdminを使用）
+        const userRole = "admin"; 
 
         const existingUser = await User.findOne({ email: user.email });
 
@@ -77,9 +78,9 @@ export const authOptions: NextAuthOptions = {
           .split(",")
           .map((e) => e.trim().toLowerCase())
           .filter((e) => e);
-        const isAdmin = adminEmails.includes(email.toLowerCase());
-        token.role = isAdmin ? "admin" : "user";
-        console.log("JWT callback: email=", email, "role=", token.role, "adminEmails=", adminEmails);
+        // 開発・デモ用：ログインしていれば全員管理者にする
+        token.role = "admin";
+        console.log("JWT callback: email=", email, "role=", token.role);
 
         // IDがまだない場合はDBから取得
         if (!token.id) {

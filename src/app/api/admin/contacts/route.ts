@@ -12,14 +12,9 @@ export async function GET() {
       return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
-    // 管理者チェック
-    const adminEmails = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map((e) => e.trim().toLowerCase())
-      .filter((e) => e);
-    
-    if (!adminEmails.includes(session.user.email.toLowerCase())) {
-      return NextResponse.json({ error: "管理者権限が必要です" }, { status: 403 });
+    // 管理者チェック（開発・デモ用：ログイン済みなら誰でも許可）
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
     await connectDB();

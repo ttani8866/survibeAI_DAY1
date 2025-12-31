@@ -7,20 +7,16 @@ import Contact from "@/models/Contact";
 
 export async function GET() {
   try {
-    // デバッグ: セッション情報を取得して返す
+    // デバッグ: セッション情報を取得
     const session = await getServerSession(authOptions);
-    const adminEmails = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map((e) => e.trim().toLowerCase())
-      .filter((e) => e);
     
-    console.log("Stats API Debug:", {
-      session: session,
-      adminEmails: adminEmails,
-      env_admin: process.env.ADMIN_EMAILS
-    });
+    // 管理者チェック（開発・デモ用：ログイン済みなら誰でも許可）
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    }
+    
+    console.log("Stats API Access by:", session.user.email);
 
-    // 一時的にセッションなしでもDB接続テスト
     await connectDB();
 
     // 統計情報を取得

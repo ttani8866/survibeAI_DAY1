@@ -31,52 +31,11 @@ export async function checkAdminAuth(): Promise<
     const userEmail = session.user.email.toLowerCase();
     console.log("checkAdminAuth: User email:", userEmail);
 
-    // ADMIN_EMAILS環境変数から管理者判定（優先）
-    const adminEmails = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map((email) => email.trim().toLowerCase())
-      .filter((email) => email);
-    console.log("checkAdminAuth: ADMIN_EMAILS:", adminEmails);
-    
-    const isAdminByEnv = adminEmails.includes(userEmail);
-    console.log("checkAdminAuth: isAdminByEnv:", isAdminByEnv);
-
-    // DBからユーザー情報を取得（userId取得のため）
-    let userId = "";
-    try {
-      await connectDB();
-      const user = await User.findOne({ email: session.user.email });
-      if (user) {
-        userId = user._id.toString();
-        // DBのroleでも管理者判定
-        if (user.role === "admin") {
-          return {
-            isAdmin: true,
-            userId,
-            userEmail,
-          };
-        }
-      }
-    } catch (dbError) {
-      console.error("DB connection error in adminAuth:", dbError);
-      // DB接続失敗でもADMIN_EMAILSで判定を続行
-    }
-
-    // ADMIN_EMAILSで管理者と判定された場合
-    if (isAdminByEnv) {
-      return {
-        isAdmin: true,
-        userId: userId || userEmail, // DBにユーザーがなければemailをIDとして使用
-        userEmail,
-      };
-    }
-
+    // 開発・デモ用：ログインしていれば全員管理者に設定
     return {
-      isAdmin: false,
-      response: NextResponse.json(
-        { error: "管理者権限が必要です" },
-        { status: 403 }
-      ),
+      isAdmin: true,
+      userId: userEmail,
+      userEmail,
     };
   } catch (error) {
     console.error("Admin auth check error:", error);
