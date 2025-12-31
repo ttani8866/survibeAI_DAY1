@@ -62,10 +62,11 @@ export default function AdminUsersPage() {
   const fetchUsers = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/users");
-      if (!res.ok) {
-        throw new Error("ユーザー一覧の取得に失敗しました");
-      }
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.detail || data.error || "ユーザー一覧の取得に失敗しました");
+      }
       setUsers(data.users);
     } catch (err) {
       setError(err instanceof Error ? err.message : "エラーが発生しました");

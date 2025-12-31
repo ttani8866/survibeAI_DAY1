@@ -56,10 +56,11 @@ export default function AdminContactsPage() {
   const fetchContacts = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/contacts");
-      if (!res.ok) {
-        throw new Error("お問合せ一覧の取得に失敗しました");
-      }
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.detail || data.error || "お問合せ一覧の取得に失敗しました");
+      }
       setContacts(data.contacts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "エラーが発生しました");

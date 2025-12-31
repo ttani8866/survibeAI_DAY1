@@ -33,10 +33,14 @@ export async function GET() {
       totalUsers,
       totalContacts,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Stats API error:", error);
     return NextResponse.json(
-      { error: "統計情報の取得に失敗しました", detail: String(error) },
+      { 
+        error: "統計情報の取得に失敗しました", 
+        detail: error.message || String(error),
+        code: error.code || "UNKNOWN_ERROR"
+      },
       { status: 500 }
     );
   }

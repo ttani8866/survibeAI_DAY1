@@ -41,10 +41,14 @@ export async function GET() {
     }));
 
     return NextResponse.json({ users: formattedUsers });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Users API error:", error);
     return NextResponse.json(
-      { error: "ユーザー一覧の取得に失敗しました", detail: String(error) },
+      { 
+        error: "ユーザー一覧の取得に失敗しました", 
+        detail: error.message || String(error),
+        code: error.code || "UNKNOWN_ERROR"
+      },
       { status: 500 }
     );
   }

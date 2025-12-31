@@ -41,10 +41,14 @@ export async function GET() {
     }));
 
     return NextResponse.json({ contacts: formattedContacts });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Contacts API error:", error);
     return NextResponse.json(
-      { error: "お問合せ一覧の取得に失敗しました", detail: String(error) },
+      { 
+        error: "お問合せ一覧の取得に失敗しました", 
+        detail: error.message || String(error),
+        code: error.code || "UNKNOWN_ERROR"
+      },
       { status: 500 }
     );
   }

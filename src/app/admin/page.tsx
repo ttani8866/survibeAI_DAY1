@@ -37,10 +37,11 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const res = await fetch("/api/admin/stats");
-      if (!res.ok) {
-        throw new Error("統計情報の取得に失敗しました");
-      }
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.detail || data.error || "統計情報の取得に失敗しました");
+      }
       setStats(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "エラーが発生しました");
