@@ -5,7 +5,7 @@ import User from "@/models/User";
 
 /**
  * 管理者権限チェック
- * @returns {Promise<{isAdmin: true, userId: string} | {isAdmin: false, response: NextResponse}>}
+ * ADMIN_EMAILS環境変数またはDBのroleで判定
  */
 export async function checkAdminAuth(): Promise<
   | { isAdmin: true; userId: string; userEmail: string }
@@ -24,25 +24,52 @@ export async function checkAdminAuth(): Promise<
       };
     }
 
-    await connectDB();
+    const userEmail = session.user.email.toLowerCase();
 
-    // DBからユーザーを取得して権限確認
-    const user = await User.findOne({ email: session.user.email });
+    // ADMIN_EMAILS環境変数から管理者判定（優先）
+    const adminEmails = (process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map((email) => email.trim().toLowerCase())
+      .filter((email) => email);
+    
+    const isAdminByEnv = adminEmails.includes(userEmail);
 
-    if (!user || user.role !== "admin") {
+    // DBからユーザー情報を取得（userId取得のため）
+    let userId = "";
+    try {
+      await connectDB();
+      const user = await User.findOne({ email: session.user.email });
+      if (user) {
+        userId = user._id.toString();
+        // DBのroleでも管理者判定
+        if (user.role === "admin") {
+          return {
+            isAdmin: true,
+            userId,
+            userEmail,
+          };
+        }
+      }
+    } catch (dbError) {
+      console.error("DB connection error in adminAuth:", dbError);
+      // DB接続失敗でもADMIN_EMAILSで判定を続行
+    }
+
+    // ADMIN_EMAILSで管理者と判定された場合
+    if (isAdminByEnv) {
       return {
-        isAdmin: false,
-        response: NextResponse.json(
-          { error: "管理者権限が必要です" },
-          { status: 403 }
-        ),
+        isAdmin: true,
+        userId: userId || userEmail, // DBにユーザーがなければemailをIDとして使用
+        userEmail,
       };
     }
 
     return {
-      isAdmin: true,
-      userId: user._id.toString(),
-      userEmail: session.user.email,
+      isAdmin: false,
+      response: NextResponse.json(
+        { error: "管理者権限が必要です" },
+        { status: 403 }
+      ),
     };
   } catch (error) {
     console.error("Admin auth check error:", error);
