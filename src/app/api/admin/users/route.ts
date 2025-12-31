@@ -33,7 +33,7 @@ export async function GET() {
   } catch (error) {
     console.error("Users API error:", error);
     return NextResponse.json(
-      { error: "ユーザー一覧の取得に失敗しました" },
+      { error: "ユーザー一覧の取得に失敗しました", detail: String(error) },
       { status: 500 }
     );
   }

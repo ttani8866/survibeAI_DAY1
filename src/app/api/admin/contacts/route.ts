@@ -33,7 +33,7 @@ export async function GET() {
   } catch (error) {
     console.error("Contacts API error:", error);
     return NextResponse.json(
-      { error: "お問合せ一覧の取得に失敗しました" },
+      { error: "お問合せ一覧の取得に失敗しました", detail: String(error) },
       { status: 500 }
     );
   }
