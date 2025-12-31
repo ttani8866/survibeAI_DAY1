@@ -140,10 +140,19 @@ export default function CodeReviewPage() {
     setResult(null);
 
     try {
-      const reviewResult = await simulateCodeReview(code, language);
+      const res = await fetch("/api/ai/code-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, language }),
+      });
+
+      if (!res.ok) throw new Error("コードレビューに失敗しました");
+      
+      const reviewResult = await res.json();
       setResult(reviewResult);
     } catch (error) {
       console.error("Review failed:", error);
+      alert("レビュー中にエラーが発生しました。GEMINI_API_KEYの設定を確認してください。");
     } finally {
       setIsLoading(false);
     }

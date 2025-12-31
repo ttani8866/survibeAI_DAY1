@@ -168,21 +168,38 @@ export default function AIChatPage() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput("");
     setIsLoading(true);
 
     try {
-      const response = await getAIResponse(text);
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+
+      if (!res.ok) throw new Error("AIチャットに失敗しました");
+      
+      const data = await res.json();
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: response,
+        content: data.content,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error:", error);
+      // エラー時のメッセージ
+      setMessages((prev) => [...prev, {
+        id: "error-" + Date.now(),
+        role: "assistant",
+        content: "申し訳ありません。AIとの通信中にエラーが発生しました。GEMINI_API_KEYが正しく設定されているか確認してください。",
+        timestamp: new Date(),
+      }]);
     } finally {
       setIsLoading(false);
     }
