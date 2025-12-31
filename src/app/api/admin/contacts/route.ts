@@ -1,14 +1,25 @@
 import { NextResponse } from "next/server";
-import { checkAdminAuth } from "@/lib/adminAuth";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 import connectDB from "@/lib/mongodb";
 import Contact from "@/models/Contact";
 
 export async function GET() {
   try {
-    // 管理者権限チェック
-    const authResult = await checkAdminAuth();
-    if (!authResult.isAdmin) {
-      return authResult.response;
+    // セッション取得
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    }
+
+    // 管理者チェック
+    const adminEmails = (process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map((e) => e.trim().toLowerCase())
+      .filter((e) => e);
+    
+    if (!adminEmails.includes(session.user.email.toLowerCase())) {
+      return NextResponse.json({ error: "管理者権限が必要です" }, { status: 403 });
     }
 
     await connectDB();
