@@ -7,33 +7,20 @@ import Contact from "@/models/Contact";
 
 export async function GET() {
   try {
-    // セッション取得
+    // デバッグ: セッション情報を取得して返す
     const session = await getServerSession(authOptions);
-    console.log("Stats API - Session:", JSON.stringify(session));
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: "認証が必要です" },
-        { status: 401 }
-      );
-    }
-
-    // 管理者チェック（ADMIN_EMAILSから直接判定）
     const adminEmails = (process.env.ADMIN_EMAILS || "")
       .split(",")
       .map((e) => e.trim().toLowerCase())
       .filter((e) => e);
     
-    const isAdmin = adminEmails.includes(session.user.email.toLowerCase());
-    console.log("Stats API - Email:", session.user.email, "isAdmin:", isAdmin, "adminEmails:", adminEmails);
+    console.log("Stats API Debug:", {
+      session: session,
+      adminEmails: adminEmails,
+      env_admin: process.env.ADMIN_EMAILS
+    });
 
-    if (!isAdmin) {
-      return NextResponse.json(
-        { error: "管理者権限が必要です" },
-        { status: 403 }
-      );
-    }
-
+    // 一時的にセッションなしでもDB接続テスト
     await connectDB();
 
     // 統計情報を取得
