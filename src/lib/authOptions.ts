@@ -65,23 +65,33 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, user }) {
+      // 初回サインイン時: userからemailを取得
       if (user?.email) {
+        token.email = user.email;
+      }
+
+      // emailがある場合は毎回ADMIN_EMAILSをチェック
+      const email = token.email as string | undefined;
+      if (email) {
         const adminEmails = (process.env.ADMIN_EMAILS || "")
           .split(",")
-          .map((email) => email.trim().toLowerCase())
-          .filter((email) => email);
-        const isAdmin = adminEmails.includes(user.email?.toLowerCase() || "");
+          .map((e) => e.trim().toLowerCase())
+          .filter((e) => e);
+        const isAdmin = adminEmails.includes(email.toLowerCase());
         token.role = isAdmin ? "admin" : "user";
-        token.email = user.email;
+        console.log("JWT callback: email=", email, "role=", token.role, "adminEmails=", adminEmails);
 
-        try {
-          await connectDB();
-          const dbUser = await User.findOne({ email: user.email });
-          if (dbUser) {
-            token.id = dbUser._id.toString();
+        // IDがまだない場合はDBから取得
+        if (!token.id) {
+          try {
+            await connectDB();
+            const dbUser = await User.findOne({ email });
+            if (dbUser) {
+              token.id = dbUser._id.toString();
+            }
+          } catch (error) {
+            console.error("JWT callback DB error:", error);
           }
-        } catch (error) {
-          console.error("JWT callback DB error:", error);
         }
       }
       return token;
