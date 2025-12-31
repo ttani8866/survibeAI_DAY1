@@ -45,6 +45,11 @@ const menuItems = [
     path: "/admin/contacts",
     icon: <EmailIcon />,
   },
+  {
+    title: "サイトに戻る",
+    path: "/dashboard",
+    icon: <ArrowBackIcon />,
+  },
 ];
 
 interface AdminLayoutProps {
@@ -81,7 +86,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
 
       {/* メニュー */}
-      <List sx={{ flex: 1, pt: 2 }}>
+      <List sx={{ pt: 2 }}>
         {menuItems.map((item) => {
           const isActive = pathname === item.path;
           return (
@@ -120,51 +125,31 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </ListItem>
           );
         })}
+        {/* ログアウト */}
+        <ListItem disablePadding sx={{ px: 2, py: 0.5, mt: 2 }}>
+          <ListItemButton
+            onClick={() => signOut({ callbackUrl: "/" })}
+            sx={{
+              borderRadius: 2,
+              color: "#ef4444",
+              "&:hover": {
+                bgcolor: "rgba(239, 68, 68, 0.1)",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "#ef4444", minWidth: 40 }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="ログアウト"
+              primaryTypographyProps={{
+                fontWeight: 400,
+                fontSize: "0.95rem",
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
-
-      <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
-
-      {/* フッター */}
-      <Box sx={{ p: 2 }}>
-        <ListItemButton
-          component={Link}
-          href="/dashboard"
-          sx={{
-            borderRadius: 2,
-            color: "rgba(255,255,255,0.7)",
-            mb: 1,
-            "&:hover": {
-              bgcolor: "rgba(255,255,255,0.05)",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ color: "rgba(255,255,255,0.5)", minWidth: 40 }}>
-            <ArrowBackIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary="サイトに戻る"
-            primaryTypographyProps={{ fontSize: "0.9rem" }}
-          />
-        </ListItemButton>
-        <ListItemButton
-          onClick={() => signOut({ callbackUrl: "/" })}
-          sx={{
-            borderRadius: 2,
-            color: "#ef4444",
-            "&:hover": {
-              bgcolor: "rgba(239, 68, 68, 0.1)",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ color: "#ef4444", minWidth: 40 }}>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary="ログアウト"
-            primaryTypographyProps={{ fontSize: "0.9rem" }}
-          />
-        </ListItemButton>
-      </Box>
     </Box>
   );
 
